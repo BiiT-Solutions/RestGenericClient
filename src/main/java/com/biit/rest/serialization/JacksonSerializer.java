@@ -18,7 +18,7 @@ public class JacksonSerializer {
 		return objectMapper;
 	}
 
-	protected static ObjectMapper generateCustomSerializer(Map<Class, JsonSerializer> customSerializers) {
+	public static ObjectMapper generateCustomSerializer(Map<Class, JsonSerializer> customSerializers) {
 		ObjectMapper customObjectMapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		customSerializers.forEach(module::addSerializer);
