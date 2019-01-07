@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
@@ -20,6 +21,19 @@
 		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
 		<tag>rest-generic-client</tag>
 	</scm>
+
+	<repositories>
+		<repository>
+			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
