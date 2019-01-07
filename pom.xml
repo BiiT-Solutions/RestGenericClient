@@ -9,22 +9,16 @@
 
 	<distributionManagement>
 		<repository>
-			<id>central</id>
-			<name>libs-releases</name>
-			<url>https://dev.biit-solutions.com/artifactory/libs-release</url>
+			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
 		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>https://dev.biit-solutions.com/artifactory/libs-snapshot</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 
 	<scm>
-		<connection>scm:git:git.biit-solutions.com:RestGenericClient.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
-		<tag>d3-client</tag>
+		<connection>scm:git:ssh.dev.azure.com:v3/maisteringbv/MBV-VAL-PROJECT-BIIT/RestGenericClient</connection>
+		<developerConnection>scm:git:ssh.dev.azure.com:v3/maisteringbv/MBV-VAL-PROJECT-BIIT/RestGenericClient</developerConnection>
+		<tag>rest-generic-client</tag>
 	</scm>
 
 	<properties>
