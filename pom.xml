@@ -16,8 +16,8 @@
 
 
 	<scm>
-		<connection>scm:git:git.biit-solutions.com:RestGenericClient.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
+		<connection>scm:git:ssh.dev.azure.com:v3/maisteringbv/MBV-VAL-PROJECT-BIIT/RestGenericClient</connection>
+		<developerConnection>scm:git:ssh.dev.azure.com:v3/maisteringbv/MBV-VAL-PROJECT-BIIT/RestGenericClient</developerConnection>
 		<tag>rest-generic-client</tag>
 	</scm>
 
