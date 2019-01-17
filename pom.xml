@@ -79,7 +79,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>d3-client</finalName>
+		<finalName>rest-generic-client</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

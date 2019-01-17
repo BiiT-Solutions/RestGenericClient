@@ -9,16 +9,15 @@ import java.util.Map;
 public class JacksonSerializer {
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
-
 	private JacksonSerializer() {
-		//Utility class should not be instantiated
+		// Utility class should not be instantiated
 	}
 
 	public static ObjectMapper getDefaultSerializer() {
 		return objectMapper;
 	}
 
-	public static ObjectMapper generateCustomSerializer(Map<Class, JsonSerializer> customSerializers) {
+	public static ObjectMapper generateCustomSerializer(Map<Class<?>, JsonSerializer> customSerializers) {
 		ObjectMapper customObjectMapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		customSerializers.forEach(module::addSerializer);
