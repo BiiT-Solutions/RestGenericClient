@@ -3,29 +3,36 @@
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.10-SNAPSHOT</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
 	<distributionManagement>
 		<repository>
-			<id>central</id>
-			<name>libs-releases</name>
-			<url>https://dev.biit-solutions.com/artifactory/libs-release</url>
+			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
 		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>https://dev.biit-solutions.com/artifactory/libs-snapshot</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:RestGenericClient.git</connection>
 		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
-		<tag>d3-client</tag>
+		<tag>rest-generic-client</tag>
 	</scm>
+
+	<repositories>
+		<repository>
+			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
