@@ -3,14 +3,14 @@
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.10</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
 	<distributionManagement>
 		<repository>
 			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
-			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-ARTIFACTS/maven/v1</url>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
 		</repository>
 	</distributionManagement>
 
@@ -24,12 +24,12 @@
 	<repositories>
 		<repository>
 			<id>dev-azure-com-maisteringbv-mbv-val-project-artifacts</id>
-			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-ARTIFACTS/maven/v1</url>
+			<url>https://pkgs.dev.azure.com/maisteringbv/_packaging/MBV-VAL-PROJECT-ARTIFACTS/maven/v1</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
