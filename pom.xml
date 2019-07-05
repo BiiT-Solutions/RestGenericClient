@@ -49,7 +49,7 @@
 		<project.scm.id>git</project.scm.id>
 		<jackson.version>2.9.7</jackson.version>
 		<jersey.version>2.25</jersey.version>
-		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
+		<biit-common-utils.version>[1.0,1.1)</biit-common-utils.version>
 	</properties>
 
 	<dependencies>
