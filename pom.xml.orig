@@ -3,7 +3,11 @@
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.11-SNAPSHOT</version>
+<<<<<<< HEAD
+	<version>0.0.10-SNAPSHOT</version>
+=======
+	<version>0.0.9</version>
+>>>>>>> a30ceb16f2b3c20dec8e4d721a092e9847383222
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
