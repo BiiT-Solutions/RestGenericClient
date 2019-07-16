@@ -4,10 +4,10 @@
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
 <<<<<<< HEAD
-	<version>0.0.10-SNAPSHOT</version>
+	<version>0.0.11-SNAPSHOT</version>
 =======
-	<version>0.0.9</version>
->>>>>>> a30ceb16f2b3c20dec8e4d721a092e9847383222
+	<version>0.0.10</version>
+>>>>>>> d1739ae1338aee7642315c44c252de79c822fd4e
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
@@ -22,7 +22,7 @@
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:RestGenericClient.git</connection>
 		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
-		<tag>rest-generic-client-0.0.9</tag>
+		<tag>rest-generic-client-0.0.10</tag>
 	</scm>
 
 	<repositories>
