@@ -6,4 +6,8 @@ public class UnprocessableEntityException extends Exception {
 	public UnprocessableEntityException(String message) {
 		super(message);
 	}
+	
+	public UnprocessableEntityException(String message, Throwable e) {
+		super(message, e);
+	}
 }

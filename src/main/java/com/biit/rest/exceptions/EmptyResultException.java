@@ -7,4 +7,8 @@ public class EmptyResultException extends Exception {
 	public EmptyResultException(String message) {
 		super(message);
 	}
+
+	public EmptyResultException(String message, Throwable e) {
+		super(message, e);
+	}
 }

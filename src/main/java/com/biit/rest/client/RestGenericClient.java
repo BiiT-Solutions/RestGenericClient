@@ -34,13 +34,13 @@ public class RestGenericClient {
 
 		HttpAuthenticationFeature authenticationFeature = null;
 		if (authentication) {
-			authenticationFeature = HttpAuthenticationFeature.basic(RestConfigurationReader.getInstance().getRestServiceUser(), RestConfigurationReader
-					.getInstance().getRestServicePassword());
+			authenticationFeature = HttpAuthenticationFeature.basic(RestConfigurationReader.getInstance().getRestServiceUser(),
+					RestConfigurationReader.getInstance().getRestServicePassword());
 		}
 
 		String response = null;
-		RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (post) '" + target + "/" + path + "' with message:\n '" + message
-				+ "'.");
+		RestClientLogger.debug(RestGenericClient.class.getName(),
+				"Calling rest service (post) '" + target + "/" + path + "' with message:\n '" + message + "'.");
 		try {
 			ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -71,28 +71,21 @@ public class RestGenericClient {
 		} catch (Exception e) {
 			if (e instanceof ClientErrorException) {
 				if (e.getMessage().contains("HTTP 422")) {
-					UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
-					uee.setStackTrace(e.getStackTrace());
-					throw uee;
+					throw new UnprocessableEntityException(e.getMessage(), e);
 				} else if (e.getMessage().contains("HTTP 406")) {
-					EmptyResultException uee = new EmptyResultException(e.getMessage());
-					uee.setStackTrace(e.getStackTrace());
-					throw uee;
+					throw new EmptyResultException(e.getMessage(), e);
 				}
 			}
-			RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + "/" + path + "' with message:\n '" + message
-					+ "' error!");
-			RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
+			throw e;
 		}
-		return "";
 	}
 
 	public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
 			throws UnprocessableEntityException, EmptyResultException {
 		HttpAuthenticationFeature authenticationFeature = null;
 		if (authentication) {
-			authenticationFeature = HttpAuthenticationFeature.basic(RestConfigurationReader.getInstance().getRestServiceUser(), RestConfigurationReader
-					.getInstance().getRestServicePassword());
+			authenticationFeature = HttpAuthenticationFeature.basic(RestConfigurationReader.getInstance().getRestServiceUser(),
+					RestConfigurationReader.getInstance().getRestServicePassword());
 		}
 
 		String response = null;
