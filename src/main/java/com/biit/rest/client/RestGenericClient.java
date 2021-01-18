@@ -69,6 +69,8 @@ public class RestGenericClient {
 			RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
 			return response;
 		} catch (Exception e) {
+			RestClientLogger.severe(RestGenericClient.class.getName(),
+					"Error calling rest service (post) '" + target + "/" + path + "' with message:\n '" + message + "'.");
 			if (e instanceof ClientErrorException) {
 				if (e.getMessage().contains("HTTP 422")) {
 					throw new UnprocessableEntityException(e.getMessage(), e);
@@ -118,6 +120,7 @@ public class RestGenericClient {
 			RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
 			return response;
 		} catch (Exception e) {
+			RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + "/" + path + "'.");
 			if (e instanceof ClientErrorException) {
 				if (e.getMessage().contains("HTTP 422")) {
 					UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
