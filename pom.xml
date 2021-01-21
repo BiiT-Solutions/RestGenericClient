@@ -42,10 +42,17 @@
 		<project.scm.id>git</project.scm.id>
 		<jackson.version>2.9.7</jackson.version>
 		<jersey.version>2.25</jersey.version>
+		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[1.0,1.1)</biit-common-utils.version>
+		<liferay-configuration-reader.version>[1.0,2.0)</liferay-configuration-reader.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.biit.liferay</groupId>
+			<artifactId>liferay-configuration-reader</artifactId>
+			<version>${liferay-configuration-reader.version}</version>
+		</dependency>
 		<!-- File access and logger -->
 		<dependency>
 			<groupId>com.biit</groupId>
