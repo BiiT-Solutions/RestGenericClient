@@ -22,7 +22,7 @@
 
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</connection>
-		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
+		<developerConnection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
 		<tag>rest-generic-client-0.0.12</tag>
 	</scm>
 
