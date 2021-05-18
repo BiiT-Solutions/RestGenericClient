@@ -21,8 +21,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:git.biit-solutions.com:RestGenericClient.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:RestGenericClient.git</developerConnection>
+		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</connection>
+		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
 		<tag>rest-generic-client-0.0.12</tag>
 	</scm>
 
