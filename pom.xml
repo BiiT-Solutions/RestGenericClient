@@ -3,7 +3,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.22-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
@@ -43,8 +43,8 @@
 		<jackson.version>2.9.7</jackson.version>
 		<jersey.version>2.25</jersey.version>
 		<!-- BiiT dependencies -->
-		<biit-common-utils.version>[1.0,1.1)</biit-common-utils.version>
-		<liferay-configuration-reader.version>[1.0,2.0)</liferay-configuration-reader.version>
+		<biit-common-utils.version>[1.1,1.2)</biit-common-utils.version>
+		<liferay-configuration-reader.version>[1,2)</liferay-configuration-reader.version>
 	</properties>
 
 	<dependencies>
@@ -58,12 +58,6 @@
 			<groupId>com.biit</groupId>
 			<artifactId>common-utils</artifactId>
 			<version>${biit-common-utils.version}</version>
-		</dependency>
-		<!-- log4j -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 		<!-- Testing -->
 		<dependency>

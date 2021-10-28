@@ -1,10 +1,11 @@
 package com.biit.rest.logger;
 
 import com.biit.logger.BiitLogger;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestClientLogger extends BiitLogger {
-	private static Logger logger = Logger.getLogger(RestClientLogger.class);
+	private static Logger logger = LoggerFactory.getLogger(RestClientLogger.class);
 
 	/**
 	 * Events that have business meaning (i.e. creating category, deleting form,
