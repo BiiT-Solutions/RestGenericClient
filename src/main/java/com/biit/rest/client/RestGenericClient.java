@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -119,6 +120,8 @@ public class RestGenericClient {
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
             return response;
+        } catch (ProcessingException e) {
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + "/" + path + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + "/" + path + "'.");
             if (e instanceof ClientErrorException) {
