@@ -7,6 +7,13 @@
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
+	<parent>
+		<groupId>com.biit</groupId>
+		<artifactId>versions</artifactId>
+		<version>[0.1,0.2)</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
 	<distributionManagement>
 		<repository>
 			<id>central</id>
@@ -26,71 +33,36 @@
 		<tag>rest-generic-client-1.0.17</tag>
 	</scm>
 
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.jdk.version>1.8</java.jdk.version>
-		<plugin.compiler.version>2.3.2</plugin.compiler.version>
-		<plugin.exec.version>1.2.1</plugin.exec.version>
-		<org.testng.version>6.8</org.testng.version>
-		<maven-surefire.version>2.17</maven-surefire.version>
-		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
-		<log4j.version>1.2.17</log4j.version>
-		<javax.mail.version>1.4.7</javax.mail.version>
-		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
-		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
-		<project.scm.id>git</project.scm.id>
-		<jackson.version>2.9.7</jackson.version>
-		<jersey.version>2.25</jersey.version>
-		<!-- BiiT dependencies -->
-		<biit-common-utils.version>[1.1,1.2)</biit-common-utils.version>
-		<liferay-configuration-reader.version>[1,2)</liferay-configuration-reader.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.biit.liferay</groupId>
 			<artifactId>liferay-configuration-reader</artifactId>
-			<version>${liferay-configuration-reader.version}</version>
 		</dependency>
 		<!-- File access and logger -->
 		<dependency>
 			<groupId>com.biit</groupId>
 			<artifactId>common-utils</artifactId>
-			<version>${biit-common-utils.version}</version>
 		</dependency>
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${org.testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
 		</dependency>
 		<!-- Jersey Client, Jersey Container, Jersey + Spring -->
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>${jersey.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>rest-generic-client</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${plugin.compiler.version}</version>
-				<configuration>
-					<source>${java.jdk.version}</source>
-					<target>${java.jdk.version}</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
