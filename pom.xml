@@ -3,7 +3,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.18-SNAPSHOT</version>
+	<version>1.0.18</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 
@@ -11,7 +11,7 @@
 		<groupId>com.biit</groupId>
 		<artifactId>versions</artifactId>
 		<version>[0.1,0.2)</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<distributionManagement>
@@ -30,7 +30,7 @@
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</connection>
 		<developerConnection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
-		<tag>rest-generic-client-1.0.17</tag>
+		<tag>rest-generic-client-1.0.18</tag>
 	</scm>
 
 	<dependencies>
