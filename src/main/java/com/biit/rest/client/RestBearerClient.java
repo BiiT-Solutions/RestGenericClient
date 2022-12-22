@@ -14,6 +14,7 @@ import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -26,18 +27,12 @@ import java.util.Map.Entry;
 /**
  * Generic rest client using Jersey API that returns a string.
  */
-public class RestGenericClient {
+public class RestBearerClient {
 
-    public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType,
-                              String username, String password, Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
-
-        HttpAuthenticationFeature authenticationFeature = null;
-        if (username != null && password != null) {
-            authenticationFeature = HttpAuthenticationFeature.basic(username, password);
-        }
-
+    public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, String encodedToken,
+                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
         String response;
-        RestClientLogger.debug(RestGenericClient.class.getName(),
+        RestClientLogger.debug(RestBearerClient.class.getName(),
                 "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
@@ -46,11 +41,6 @@ public class RestGenericClient {
             if (ssl) {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
-            }
-
-            // Enable authentication
-            if (username != null && password != null && authenticationFeature != null) {
-                builder = builder.register(authenticationFeature);
             }
 
             // Add Parameters
@@ -62,12 +52,13 @@ public class RestGenericClient {
             }
 
             // Call the webservice
-            response = webTarget.request(requestType).post(Entity.entity(message, messageType), String.class);
+            response = webTarget.request(requestType).header(HttpHeaders.AUTHORIZATION, "Bearer " + encodedToken)
+                    .post(Entity.entity(message, messageType), String.class);
 
-            RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
+            RestClientLogger.debug(RestBearerClient.class.getName(), "Service returns '" + response + "'.");
             return response;
         } catch (Exception e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(),
+            RestClientLogger.severe(RestBearerClient.class.getName(),
                     "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
@@ -80,25 +71,11 @@ public class RestGenericClient {
         }
     }
 
-
-    public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
-                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
-        if (authentication) {
-            return post(ssl, target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
-                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
-        }
-        return post(ssl, target, path, message, requestType, messageType, null, null, parameters);
-    }
-
-    public static String get(boolean ssl, String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
+    public static String get(boolean ssl, String target, String path, String messageType, String encodedToken, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
-        HttpAuthenticationFeature authenticationFeature = null;
-        if (username != null & password != null) {
-            authenticationFeature = HttpAuthenticationFeature.basic(username, password);
-        }
 
         String response;
-        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
+        RestClientLogger.debug(RestBearerClient.class.getName(), "Calling rest service (get) '" + target +
                 (!target.endsWith("/") ? "/" : "") + path + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
@@ -108,12 +85,6 @@ public class RestGenericClient {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
-
-            // Enable authentication
-            if (username != null & password != null && authenticationFeature != null) {
-                builder = builder.register(authenticationFeature);
-            }
-
             // Add Parameters
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(path);
             if (parameters != null && !parameters.isEmpty()) {
@@ -123,14 +94,14 @@ public class RestGenericClient {
             }
 
             // Call the webservice
-            response = webTarget.request().accept(messageType).get(String.class);
+            response = webTarget.request().header(HttpHeaders.AUTHORIZATION, "Bearer " + encodedToken).accept(messageType).get(String.class);
 
-            RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
+            RestClientLogger.debug(RestBearerClient.class.getName(), "Service returns '" + response + "'.");
             return response;
         } catch (ProcessingException e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
         } catch (Exception e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Error calling rest rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -142,20 +113,10 @@ public class RestGenericClient {
                     throw uee;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path + "'!");
-            RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path + "'!");
+            RestClientLogger.errorMessage(RestBearerClient.class.getName(), e);
         }
         return "";
-    }
-
-    public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
-
-        if (authentication) {
-            return get(ssl, target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
-                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
-        }
-        return get(ssl, target, path, messageType, null, null, parameters);
     }
 
     public static byte[] callRestServiceGetJpgImage(String targetPath, String path, String json) {
@@ -185,7 +146,7 @@ public class RestGenericClient {
             try {
                 return toByteArray(result);
             } catch (IOException e) {
-                BiitCommonLogger.errorMessageNotification(RestGenericClient.class, e);
+                BiitCommonLogger.errorMessageNotification(RestBearerClient.class, e);
             }
         }
         return null;
