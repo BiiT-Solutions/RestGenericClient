@@ -80,8 +80,14 @@ public class RestGenericClient {
         }
     }
 
-
+    @Deprecated
     public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
+                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+        return post(target, path, message, requestType, message, authentication, parameters);
+    }
+
+
+    public static String post(String target, String path, String message, String requestType, String messageType, boolean authentication,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
         if (authentication) {
             return post(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
@@ -148,7 +154,15 @@ public class RestGenericClient {
         return "";
     }
 
+
+    @Deprecated
     public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException {
+        return get(target, path, messageType, authentication, parameters);
+    }
+
+
+    public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
 
         if (authentication) {
