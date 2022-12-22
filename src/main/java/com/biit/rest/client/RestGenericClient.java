@@ -41,7 +41,7 @@ public class RestGenericClient {
 
         String response = null;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (post) '" + target + "/" + path + "' with message:\n '" + message + "'.");
+                "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -71,7 +71,7 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (post) '" + target + "/" + path + "' with message:\n '" + message + "'.");
+                    "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -92,7 +92,8 @@ public class RestGenericClient {
         }
 
         String response = null;
-        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target + "/" + path + "'.");
+        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
+                (!target.endsWith("/") ? "/" : "") + path + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -121,9 +122,9 @@ public class RestGenericClient {
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
             return response;
         } catch (ProcessingException e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + "/" + path + "'.");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
         } catch (Exception e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + "/" + path + "'.");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -135,7 +136,7 @@ public class RestGenericClient {
                     throw uee;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + "/" + path + "'!");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
         }
         return "";
