@@ -29,7 +29,7 @@ import java.util.Map.Entry;
  */
 public class RestBearerClient {
 
-    public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, String encodedToken,
+    public static String post(String target, String path, String message, String requestType, String messageType, String encodedToken,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
         String response;
         RestClientLogger.debug(RestBearerClient.class.getName(),
@@ -38,7 +38,7 @@ public class RestBearerClient {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
             // Https
-            if (ssl) {
+            if (target.startsWith("https")) {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
@@ -71,7 +71,7 @@ public class RestBearerClient {
         }
     }
 
-    public static String get(boolean ssl, String target, String path, String messageType, String encodedToken, Map<String, Object> parameters)
+    public static String get(String target, String path, String messageType, String encodedToken, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
 
         String response;
@@ -81,7 +81,7 @@ public class RestBearerClient {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
             // Https
-            if (ssl) {
+            if (target.startsWith("https")) {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }

@@ -28,7 +28,7 @@ import java.util.Map.Entry;
  */
 public class RestGenericClient {
 
-    public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType,
+    public static String post(String target, String path, String message, String requestType, String messageType,
                               String username, String password, Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
 
         HttpAuthenticationFeature authenticationFeature = null;
@@ -43,7 +43,7 @@ public class RestGenericClient {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
             // Https
-            if (ssl) {
+            if (target.startsWith("https")) {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
@@ -84,13 +84,13 @@ public class RestGenericClient {
     public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
         if (authentication) {
-            return post(ssl, target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
+            return post(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters);
         }
-        return post(ssl, target, path, message, requestType, messageType, null, null, parameters);
+        return post(target, path, message, requestType, messageType, null, null, parameters);
     }
 
-    public static String get(boolean ssl, String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
+    public static String get(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null & password != null) {
@@ -104,7 +104,7 @@ public class RestGenericClient {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
             // Https
-            if (ssl) {
+            if (target.startsWith("https")) {
                 SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
@@ -152,10 +152,10 @@ public class RestGenericClient {
             throws UnprocessableEntityException, EmptyResultException {
 
         if (authentication) {
-            return get(ssl, target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
+            return get(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters);
         }
-        return get(ssl, target, path, messageType, null, null, parameters);
+        return get(target, path, messageType, null, null, parameters);
     }
 
     public static byte[] callRestServiceGetJpgImage(String targetPath, String path, String json) {
