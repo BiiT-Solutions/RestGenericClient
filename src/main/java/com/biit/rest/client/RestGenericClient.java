@@ -3,6 +3,7 @@ package com.biit.rest.client;
 import com.biit.liferay.configuration.LiferayConfigurationReader;
 import com.biit.logger.BiitCommonLogger;
 import com.biit.rest.exceptions.EmptyResultException;
+import com.biit.rest.exceptions.NotFoundException;
 import com.biit.rest.exceptions.UnprocessableEntityException;
 import com.biit.rest.logger.RestClientLogger;
 import org.glassfish.jersey.SslConfigurator;
@@ -38,7 +39,8 @@ public class RestGenericClient {
 
         String response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
+                "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -68,12 +70,17 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
+                    "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
                 } else if (e.getMessage().contains("HTTP 406")) {
                     throw new EmptyResultException(e.getMessage(), e);
+                } else if (e.getMessage().contains("HTTP 404")) {
+                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
                 }
             }
             throw e;
@@ -136,7 +143,8 @@ public class RestGenericClient {
         } catch (ProcessingException e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
         } catch (Exception e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                    "' with parameters '" + parameters + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -146,14 +154,19 @@ public class RestGenericClient {
                     EmptyResultException uee = new EmptyResultException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
+                } else if (e.getMessage().contains("HTTP 404")) {
+                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path + "'!");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                    "' with parameters '" + parameters + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
+            throw e;
         }
         return "";
     }
-
 
     @Deprecated
     public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
@@ -170,6 +183,81 @@ public class RestGenericClient {
                     LiferayConfigurationReader.getInstance().getPassword(), parameters);
         }
         return get(target, path, messageType, null, null, parameters);
+    }
+
+    public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException {
+
+        if (authentication) {
+            return delete(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
+        }
+        return delete(target, path, messageType, null, null, parameters);
+    }
+
+    public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException {
+        HttpAuthenticationFeature authenticationFeature = null;
+        if (username != null & password != null) {
+            authenticationFeature = HttpAuthenticationFeature.basic(username, password);
+        }
+
+        String response;
+        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
+                (!target.endsWith("/") ? "/" : "") + path + "'.");
+        try {
+            ClientBuilder builder = ClientBuilder.newBuilder();
+
+            // Https
+            if (target.startsWith("https")) {
+                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                builder = builder.sslContext(sslContext);
+            }
+
+            // Enable authentication
+            if (username != null & password != null && authenticationFeature != null) {
+                builder = builder.register(authenticationFeature);
+            }
+
+            // Add Parameters
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(path);
+            if (parameters != null && !parameters.isEmpty()) {
+                for (Entry<String, Object> record : parameters.entrySet()) {
+                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                }
+            }
+
+            // Call the webservice
+            response = webTarget.request().accept(messageType).delete(String.class);
+
+            RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
+            return response;
+        } catch (ProcessingException e) {
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+        } catch (Exception e) {
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (delete) '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                    "' with parameters '" + parameters + "'.");
+            if (e instanceof ClientErrorException) {
+                if (e.getMessage().contains("HTTP 422")) {
+                    UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
+                } else if (e.getMessage().contains("HTTP 406")) {
+                    EmptyResultException uee = new EmptyResultException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
+                } else if (e.getMessage().contains("HTTP 404")) {
+                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
+                }
+            }
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path +
+                    "' with parameters '" + parameters + "'!");
+            RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
+            throw e;
+        }
+        return "";
     }
 
     public static byte[] callRestServiceGetJpgImage(String targetPath, String path, String json) {
