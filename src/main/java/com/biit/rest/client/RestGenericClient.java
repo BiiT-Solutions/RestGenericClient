@@ -118,6 +118,16 @@ public class RestGenericClient {
         return post(target, path, message, requestType, messageType, authentication, parameters, null);
     }
 
+    public static String post(String target, String path, String message) throws UnprocessableEntityException, EmptyResultException {
+        return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, null);
+    }
+
+    public static String post(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
+        return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, headers);
+    }
+
     public static String get(String target, String path, String messageType, String username, String password, Map<String, Object> parameters,
                              List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
         HttpAuthenticationFeature authenticationFeature = null;
@@ -197,6 +207,16 @@ public class RestGenericClient {
     public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
         return get(target, path, messageType, authentication, parameters, null);
+    }
+
+    public static String get(String target, String path)
+            throws UnprocessableEntityException, EmptyResultException {
+        return get(target, path, MediaType.APPLICATION_JSON, false, null, null);
+    }
+
+    public static String get(String target, String path, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException {
+        return get(target, path, MediaType.APPLICATION_JSON, false, null, headers);
     }
 
 
