@@ -14,6 +14,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -30,7 +32,8 @@ import java.util.Map.Entry;
 public class RestGenericClient {
 
     public static String post(String target, String path, String message, String requestType, String messageType,
-                              String username, String password, Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+                              String username, String password, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException {
 
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null && password != null) {
@@ -63,8 +66,13 @@ public class RestGenericClient {
                 }
             }
 
+            final Invocation.Builder invocationBuilder = webTarget.request(requestType);
+
+            //Adding headers
+            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+
             // Call the webservice
-            response = webTarget.request(requestType).post(Entity.entity(message, messageType), String.class);
+            response = invocationBuilder.post(Entity.entity(message, messageType), String.class);
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
             return response;
@@ -87,6 +95,7 @@ public class RestGenericClient {
         }
     }
 
+
     @Deprecated
     public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
@@ -95,16 +104,22 @@ public class RestGenericClient {
 
 
     public static String post(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+                              Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
         if (authentication) {
             return post(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
-                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
         }
-        return post(target, path, message, requestType, messageType, null, null, parameters);
+        return post(target, path, message, requestType, messageType, null, null, parameters, headers);
     }
 
-    public static String get(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
+
+    public static String post(String target, String path, String message, String requestType, String messageType, boolean authentication,
+                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+        return post(target, path, message, requestType, messageType, authentication, parameters, null);
+    }
+
+    public static String get(String target, String path, String messageType, String username, String password, Map<String, Object> parameters,
+                             List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null & password != null) {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
@@ -135,8 +150,13 @@ public class RestGenericClient {
                 }
             }
 
+            final Invocation.Builder invocationBuilder = webTarget.request();
+
+            //Adding headers
+            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+
             // Call the webservice
-            response = webTarget.request().accept(messageType).get(String.class);
+            response = invocationBuilder.accept(messageType).get(String.class);
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
             return response;
@@ -171,31 +191,42 @@ public class RestGenericClient {
     @Deprecated
     public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
-        return get(target, path, messageType, authentication, parameters);
+        return get(target, path, messageType, authentication, parameters, null);
+    }
+
+    public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException {
+        return get(target, path, messageType, authentication, parameters, null);
     }
 
 
-    public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
+    public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException {
 
         if (authentication) {
             return get(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
-                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
         }
-        return get(target, path, messageType, null, null, parameters);
+        return get(target, path, messageType, null, null, parameters, headers);
     }
 
     public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
+        return delete(target, path, messageType, authentication, parameters, null);
+    }
+
+    public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException {
 
         if (authentication) {
             return delete(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
-                    LiferayConfigurationReader.getInstance().getPassword(), parameters);
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
         }
-        return delete(target, path, messageType, null, null, parameters);
+        return delete(target, path, messageType, null, null, parameters, headers);
     }
 
-    public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
+    public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters,
+                                List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null & password != null) {
@@ -227,8 +258,13 @@ public class RestGenericClient {
                 }
             }
 
+            final Invocation.Builder invocationBuilder = webTarget.request();
+
+            //Adding headers
+            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+
             // Call the webservice
-            response = webTarget.request().accept(messageType).delete(String.class);
+            response = invocationBuilder.accept(messageType).delete(String.class);
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response + "'.");
             return response;
@@ -294,13 +330,13 @@ public class RestGenericClient {
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read;
         byte[] bytes = new byte[1024];
 
         while ((read = inputStream.read(bytes)) != -1) {
-            baos.write(bytes, 0, read);
+            byteArrayOutputStream.write(bytes, 0, read);
         }
-        return baos.toByteArray();
+        return byteArrayOutputStream.toByteArray();
     }
 }
