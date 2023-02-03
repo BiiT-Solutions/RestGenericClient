@@ -219,6 +219,10 @@ public class RestGenericClient {
         return get(target, path, MediaType.APPLICATION_JSON, false, null, headers);
     }
 
+    public static String get(String target, String path, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException {
+        return get(target, path, MediaType.APPLICATION_JSON, false, parameters, null);
+    }
 
     public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException {
