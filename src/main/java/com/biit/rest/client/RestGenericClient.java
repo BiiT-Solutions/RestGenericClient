@@ -134,6 +134,12 @@ public class RestGenericClient {
                 false, null, null);
     }
 
+
+    public static String post(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, parameters, headers);
+    }
+
     public static String post(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, headers);
@@ -241,6 +247,11 @@ public class RestGenericClient {
         return get(target, path, MediaType.APPLICATION_JSON, false, parameters, null);
     }
 
+    public static String get(String target, String path, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return get(target, path, MediaType.APPLICATION_JSON, false, parameters, headers);
+    }
+
     public static String get(String target, String path, String messageType, String userName, String password, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, messageType, userName, password, parameters, null);
@@ -259,6 +270,11 @@ public class RestGenericClient {
     public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return delete(target, path, messageType, authentication, parameters, null);
+    }
+
+    public static String delete(String target, String path, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return delete(target, path, MediaType.APPLICATION_JSON, false, parameters, headers);
     }
 
     public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
