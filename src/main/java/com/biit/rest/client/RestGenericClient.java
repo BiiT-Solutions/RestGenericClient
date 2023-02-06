@@ -40,6 +40,10 @@ public class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
+        if (target == null) {
+            throw new NotFoundException("No target defined!");
+        }
+
         String response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
                 "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path +
@@ -69,7 +73,9 @@ public class RestGenericClient {
             final Invocation.Builder invocationBuilder = webTarget.request(requestType);
 
             //Adding headers
-            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            if (headers != null) {
+                headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            }
 
             // Call the webservice
             response = invocationBuilder.post(Entity.entity(message, messageType), String.class);
@@ -163,7 +169,9 @@ public class RestGenericClient {
             final Invocation.Builder invocationBuilder = webTarget.request();
 
             //Adding headers
-            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            if (headers != null) {
+                headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            }
 
             // Call the webservice
             response = invocationBuilder.accept(messageType).get(String.class);
@@ -285,7 +293,9 @@ public class RestGenericClient {
             final Invocation.Builder invocationBuilder = webTarget.request();
 
             //Adding headers
-            headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            if (headers != null) {
+                headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            }
 
             // Call the webservice
             response = invocationBuilder.accept(messageType).delete(String.class);
