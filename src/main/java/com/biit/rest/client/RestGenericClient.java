@@ -261,6 +261,11 @@ public class RestGenericClient {
         return delete(target, path, messageType, authentication, parameters, null);
     }
 
+    public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return delete(target, path, messageType, username, password, parameters, null);
+    }
+
     public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
 
