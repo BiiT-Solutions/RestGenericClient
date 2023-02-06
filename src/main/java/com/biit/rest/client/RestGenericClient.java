@@ -3,6 +3,7 @@ package com.biit.rest.client;
 import com.biit.liferay.configuration.LiferayConfigurationReader;
 import com.biit.logger.BiitCommonLogger;
 import com.biit.rest.exceptions.EmptyResultException;
+import com.biit.rest.exceptions.NotAuthorizedException;
 import com.biit.rest.exceptions.NotFoundException;
 import com.biit.rest.exceptions.UnprocessableEntityException;
 import com.biit.rest.logger.RestClientLogger;
@@ -33,7 +34,7 @@ public class RestGenericClient {
 
     public static String post(String target, String path, String message, String requestType, String messageType,
                               String username, String password, Map<String, Object> parameters, List<Header> headers)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
 
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null && password != null) {
@@ -95,6 +96,10 @@ public class RestGenericClient {
                     NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
+                } else if (e.getMessage().contains("HTTP 401")) {
+                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    nae.setStackTrace(e.getStackTrace());
+                    throw nae;
                 }
             }
             throw e;
@@ -104,13 +109,13 @@ public class RestGenericClient {
 
     @Deprecated
     public static String post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
-                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, requestType, message, authentication, parameters);
     }
 
 
     public static String post(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                              Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
+                              Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         if (authentication) {
             return post(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
@@ -120,22 +125,22 @@ public class RestGenericClient {
 
 
     public static String post(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
+                              Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, requestType, messageType, authentication, parameters, null);
     }
 
-    public static String post(String target, String path, String message) throws UnprocessableEntityException, EmptyResultException {
+    public static String post(String target, String path, String message) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, null);
     }
 
-    public static String post(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
+    public static String post(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, headers);
     }
 
     public static String get(String target, String path, String messageType, String username, String password, Map<String, Object> parameters,
-                             List<Header> headers) throws UnprocessableEntityException, EmptyResultException {
+                             List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null & password != null) {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
@@ -196,6 +201,10 @@ public class RestGenericClient {
                     NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
+                } else if (e.getMessage().contains("HTTP 401")) {
+                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    nae.setStackTrace(e.getStackTrace());
+                    throw nae;
                 }
             }
             RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path +
@@ -208,32 +217,32 @@ public class RestGenericClient {
 
     @Deprecated
     public static String get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, messageType, authentication, parameters, null);
     }
 
     public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, messageType, authentication, parameters, null);
     }
 
     public static String get(String target, String path)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, MediaType.APPLICATION_JSON, false, null, null);
     }
 
     public static String get(String target, String path, List<Header> headers)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, MediaType.APPLICATION_JSON, false, null, headers);
     }
 
     public static String get(String target, String path, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, MediaType.APPLICATION_JSON, false, parameters, null);
     }
 
     public static String get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
 
         if (authentication) {
             return get(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
@@ -243,12 +252,12 @@ public class RestGenericClient {
     }
 
     public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return delete(target, path, messageType, authentication, parameters, null);
     }
 
     public static String delete(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters, List<Header> headers)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
 
         if (authentication) {
             return delete(target, path, messageType, LiferayConfigurationReader.getInstance().getUser(),
@@ -259,7 +268,7 @@ public class RestGenericClient {
 
     public static String delete(String target, String path, String messageType, String username, String password, Map<String, Object> parameters,
                                 List<Header> headers)
-            throws UnprocessableEntityException, EmptyResultException {
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null & password != null) {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
@@ -320,6 +329,10 @@ public class RestGenericClient {
                     NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
+                } else if (e.getMessage().contains("HTTP 401")) {
+                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    nae.setStackTrace(e.getStackTrace());
+                    throw nae;
                 }
             }
             RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path +

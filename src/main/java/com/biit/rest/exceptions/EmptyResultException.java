@@ -1,6 +1,6 @@
 package com.biit.rest.exceptions;
 
-public class EmptyResultException extends Exception {
+public class EmptyResultException extends RuntimeException {
 
 	private static final long serialVersionUID = 3681934777038371416L;
 

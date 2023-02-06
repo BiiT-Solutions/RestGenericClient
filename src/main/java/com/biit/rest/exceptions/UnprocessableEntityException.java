@@ -1,6 +1,6 @@
 package com.biit.rest.exceptions;
 
-public class UnprocessableEntityException extends Exception {
+public class UnprocessableEntityException extends RuntimeException {
     private static final long serialVersionUID = 1375636360322118631L;
 
     public UnprocessableEntityException(String message) {
