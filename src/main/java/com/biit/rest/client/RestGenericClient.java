@@ -32,6 +32,14 @@ import java.util.Map.Entry;
  */
 public class RestGenericClient {
 
+    public static String parsePath(String path) {
+        return path.startsWith("/") ? path.substring(1) : path;
+    }
+
+    public static String parseTarget(String target) {
+        return target + (!target.endsWith("/") ? "/" : "");
+    }
+
     public static Response post(String target, String path, String message, String requestType, String messageType,
                                 String username, String password, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
@@ -45,11 +53,9 @@ public class RestGenericClient {
             throw new NotFoundException("No target defined!");
         }
 
-        final String fixedPath = path.startsWith("/") ? path.substring(1) : path;
-
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath +
+                "Calling rest service (post) '" + parseTarget(target) + parsePath(path) +
                         "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
@@ -66,7 +72,7 @@ public class RestGenericClient {
             }
 
             // Add Parameters
-            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(fixedPath);
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
                     webTarget = webTarget.queryParam(record.getKey(), record.getValue());
@@ -87,7 +93,7 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath +
+                    "Error calling rest service (post) '" + parseTarget(target) + parsePath(path) +
                             "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
@@ -154,11 +160,9 @@ public class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
-        final String fixedPath = path.startsWith("/") ? path.substring(1) : path;
-
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
-                (!target.endsWith("/") ? "/" : "") + fixedPath + "'.");
+                (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -174,7 +178,7 @@ public class RestGenericClient {
             }
 
             // Add Parameters
-            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(fixedPath);
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
                     webTarget = webTarget.queryParam(record.getKey(), record.getValue());
@@ -194,10 +198,10 @@ public class RestGenericClient {
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
             return response;
         } catch (ProcessingException e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath + "'.");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (get) '"
-                    + target + (!target.endsWith("/") ? "/" : "") + fixedPath + "' with parameters '" + parameters + "'.");
+                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -217,7 +221,7 @@ public class RestGenericClient {
                     throw nae;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath +
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target) + parsePath(path) +
                     "' with parameters '" + parameters + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
             throw e;
@@ -304,11 +308,9 @@ public class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
-        final String fixedPath = path.startsWith("/") ? path.substring(1) : path;
-
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
-                (!target.endsWith("/") ? "/" : "") + fixedPath + "'.");
+                (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -324,7 +326,7 @@ public class RestGenericClient {
             }
 
             // Add Parameters
-            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(fixedPath);
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
                     webTarget = webTarget.queryParam(record.getKey(), record.getValue());
@@ -344,10 +346,10 @@ public class RestGenericClient {
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
             return response;
         } catch (ProcessingException e) {
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath + "'.");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (delete) '"
-                    + target + (!target.endsWith("/") ? "/" : "") + fixedPath +
+                    + parseTarget(target) + parsePath(path) +
                     "' with parameters '" + parameters + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
@@ -368,7 +370,7 @@ public class RestGenericClient {
                     throw nae;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + fixedPath +
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target) + parsePath(path) +
                     "' with parameters '" + parameters + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
             throw e;

@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static com.biit.rest.client.RestGenericClient.parseTarget;
+
 /**
  * Generic rest client using Jersey API that returns a string.
  */
@@ -33,7 +35,7 @@ public class RestBearerClient {
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
         String response;
         RestClientLogger.debug(RestBearerClient.class.getName(),
-                "Calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
+                "Calling rest service (post) '" + parseTarget(target) + path + "' with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -59,7 +61,7 @@ public class RestBearerClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestBearerClient.class.getName(),
-                    "Error calling rest service (post) '" + target + (!target.endsWith("/") ? "/" : "") + path + "' with message:\n '" + message + "'.");
+                    "Error calling rest service (post) '" + parseTarget(target) + path + "' with message:\n '" + message + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -99,9 +101,9 @@ public class RestBearerClient {
             RestClientLogger.debug(RestBearerClient.class.getName(), "Service returns '" + response + "'.");
             return response;
         } catch (ProcessingException e) {
-            RestClientLogger.severe(RestBearerClient.class.getName(), "Invalid request to '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Invalid request to '" + parseTarget(target) + path + "'.");
         } catch (Exception e) {
-            RestClientLogger.severe(RestBearerClient.class.getName(), "Error calling rest rest service (get) '" + target + (!target.endsWith("/") ? "/" : "") + path + "'.");
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Error calling rest rest service (get) '" + parseTarget(target) + path + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -113,7 +115,7 @@ public class RestBearerClient {
                     throw uee;
                 }
             }
-            RestClientLogger.severe(RestBearerClient.class.getName(), "Calling rest service '" + target + (!target.endsWith("/") ? "/" : "") + path + "'!");
+            RestClientLogger.severe(RestBearerClient.class.getName(), "Calling rest service '" + parseTarget(target) + path + "'!");
             RestClientLogger.errorMessage(RestBearerClient.class.getName(), e);
         }
         return "";
