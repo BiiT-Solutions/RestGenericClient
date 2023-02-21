@@ -12,6 +12,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -376,6 +377,233 @@ public class RestGenericClient {
             throw e;
         }
         return Response.noContent().build();
+    }
+
+    public static Response put(String target, String path, String message, String requestType, String messageType,
+                               String username, String password, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+
+        HttpAuthenticationFeature authenticationFeature = null;
+        if (username != null && password != null) {
+            authenticationFeature = HttpAuthenticationFeature.basic(username, password);
+        }
+
+        if (target == null) {
+            throw new NotFoundException("No target defined!");
+        }
+
+        Response response;
+        RestClientLogger.debug(RestGenericClient.class.getName(),
+                "Calling rest service (put) '" + parseTarget(target) + parsePath(path) +
+                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
+        try {
+            ClientBuilder builder = ClientBuilder.newBuilder();
+
+            // Https
+            if (target.startsWith("https")) {
+                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                builder = builder.sslContext(sslContext);
+            }
+
+            // Enable authentication
+            if (username != null && password != null && authenticationFeature != null) {
+                builder = builder.register(authenticationFeature);
+            }
+
+            // Add Parameters
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
+            if (parameters != null && !parameters.isEmpty()) {
+                for (Entry<String, Object> record : parameters.entrySet()) {
+                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                }
+            }
+
+            final Invocation.Builder invocationBuilder = webTarget.request(requestType);
+
+            //Adding headers
+            if (headers != null) {
+                headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            }
+
+            // Call the webservice
+            response = invocationBuilder.put(Entity.entity(message, messageType));
+
+            RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            return response;
+        } catch (Exception e) {
+            RestClientLogger.severe(RestGenericClient.class.getName(),
+                    "Error calling rest service (put) '" + parseTarget(target) + parsePath(path) +
+                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+            if (e instanceof ClientErrorException) {
+                if (e.getMessage().contains("HTTP 422")) {
+                    throw new UnprocessableEntityException(e.getMessage(), e);
+                } else if (e.getMessage().contains("HTTP 406")) {
+                    throw new EmptyResultException(e.getMessage(), e);
+                } else if (e.getMessage().contains("HTTP 404")) {
+                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
+                } else if (e.getMessage().contains("HTTP 401")) {
+                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    nae.setStackTrace(e.getStackTrace());
+                    throw nae;
+                }
+            }
+            throw e;
+        }
+    }
+
+
+    @Deprecated
+    public static Response put(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
+                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return put(target, path, message, requestType, message, authentication, parameters);
+    }
+
+
+    public static Response put(String target, String path, String message, String requestType, String messageType, boolean authentication,
+                               Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        if (authentication) {
+            return put(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
+        }
+        return put(target, path, message, requestType, messageType, null, null, parameters, headers);
+    }
+
+
+    public static Response put(String target, String path, String message, String requestType, String messageType, boolean authentication,
+                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return put(target, path, message, requestType, messageType, authentication, parameters, null);
+    }
+
+    public static Response put(String target, String path, String message) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return put(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, null);
+    }
+
+
+    public static Response put(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return put(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, parameters, headers);
+    }
+
+    public static Response put(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return put(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, headers);
+    }
+
+
+    public static Response patch(String target, String path, String message, String requestType, String messageType,
+                                 String username, String password, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+
+        HttpAuthenticationFeature authenticationFeature = null;
+        if (username != null && password != null) {
+            authenticationFeature = HttpAuthenticationFeature.basic(username, password);
+        }
+
+        if (target == null) {
+            throw new NotFoundException("No target defined!");
+        }
+
+        Response response;
+        RestClientLogger.debug(RestGenericClient.class.getName(),
+                "Calling rest service (patch) '" + parseTarget(target) + parsePath(path) +
+                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
+        try {
+            ClientBuilder builder = ClientBuilder.newBuilder();
+
+            // Https
+            if (target.startsWith("https")) {
+                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                builder = builder.sslContext(sslContext);
+            }
+
+            // Enable authentication
+            if (username != null && password != null && authenticationFeature != null) {
+                builder = builder.register(authenticationFeature);
+            }
+
+            // Add Parameters
+            WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
+            if (parameters != null && !parameters.isEmpty()) {
+                for (Entry<String, Object> record : parameters.entrySet()) {
+                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                }
+            }
+
+            final Invocation.Builder invocationBuilder = webTarget.request(requestType);
+
+            //Adding headers
+            if (headers != null) {
+                headers.forEach(header -> invocationBuilder.header(header.getName(), header.getValue()));
+            }
+
+            // Call the webservice
+            response = invocationBuilder.method(HttpMethod.PATCH, Entity.entity(message, messageType));
+
+            RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            return response;
+        } catch (Exception e) {
+            RestClientLogger.severe(RestGenericClient.class.getName(),
+                    "Error calling rest service (patch) '" + parseTarget(target) + parsePath(path) +
+                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+            if (e instanceof ClientErrorException) {
+                if (e.getMessage().contains("HTTP 422")) {
+                    throw new UnprocessableEntityException(e.getMessage(), e);
+                } else if (e.getMessage().contains("HTTP 406")) {
+                    throw new EmptyResultException(e.getMessage(), e);
+                } else if (e.getMessage().contains("HTTP 404")) {
+                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    uee.setStackTrace(e.getStackTrace());
+                    throw uee;
+                } else if (e.getMessage().contains("HTTP 401")) {
+                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    nae.setStackTrace(e.getStackTrace());
+                    throw nae;
+                }
+            }
+            throw e;
+        }
+    }
+
+
+    @Deprecated
+    public static Response patch(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
+                                 Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return patch(target, path, message, requestType, message, authentication, parameters);
+    }
+
+
+    public static Response patch(String target, String path, String message, String requestType, String messageType, boolean authentication,
+                                 Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        if (authentication) {
+            return patch(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
+                    LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
+        }
+        return patch(target, path, message, requestType, messageType, null, null, parameters, headers);
+    }
+
+
+    public static Response patch(String target, String path, String message, String requestType, String messageType, boolean authentication,
+                                 Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return patch(target, path, message, requestType, messageType, authentication, parameters, null);
+    }
+
+    public static Response patch(String target, String path, String message) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return patch(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, null);
+    }
+
+
+    public static Response patch(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return patch(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, parameters, headers);
+    }
+
+    public static Response patch(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return patch(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
+                false, null, headers);
     }
 
     public static byte[] callRestServiceGetJpgImage(String targetPath, String path, String json) {
