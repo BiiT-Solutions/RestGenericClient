@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 /**
  * Generic rest client using Jersey API that returns a string.
@@ -91,6 +92,7 @@ public class RestGenericClient {
             response = invocationBuilder.post(Entity.entity(message, messageType));
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            checkResponse(response);
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
@@ -197,6 +199,7 @@ public class RestGenericClient {
             response = invocationBuilder.accept(messageType).get();
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            checkResponse(response);
             return response;
         } catch (ProcessingException e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
@@ -345,6 +348,7 @@ public class RestGenericClient {
             response = invocationBuilder.accept(messageType).delete();
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            checkResponse(response);
             return response;
         } catch (ProcessingException e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
@@ -429,6 +433,7 @@ public class RestGenericClient {
             response = invocationBuilder.put(Entity.entity(message, messageType));
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            checkResponse(response);
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
@@ -543,6 +548,7 @@ public class RestGenericClient {
             response = invocationBuilder.method(HttpMethod.PATCH, Entity.entity(message, messageType));
 
             RestClientLogger.debug(RestGenericClient.class.getName(), "Service returns '" + response.getEntity() + "'.");
+            checkResponse(response);
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
@@ -648,5 +654,20 @@ public class RestGenericClient {
             byteArrayOutputStream.write(bytes, 0, read);
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    private static void checkResponse(Response response) {
+        if (response == null) {
+            return;
+        }
+        if (Objects.equals(response.getStatus(), 422)) {
+            throw new UnprocessableEntityException("Returned Status is 422.");
+        } else if (Objects.equals(response.getStatus(), 406)) {
+            throw new EmptyResultException("Returned Status is 406.");
+        } else if (Objects.equals(response.getStatus(), 404)) {
+            throw new NotFoundException("Returned Status is 404.");
+        } else if (Objects.equals(response.getStatus(), 401)) {
+            throw new NotAuthorizedException("Returned Status is 401.");
+        }
     }
 }
