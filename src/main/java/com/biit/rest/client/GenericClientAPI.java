@@ -3,9 +3,9 @@ package com.biit.rest.client;
 import com.biit.rest.exceptions.EmptyResultException;
 import com.biit.rest.exceptions.UnprocessableEntityException;
 import com.biit.rest.logger.RestClientLogger;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 public abstract class GenericClientAPI {
 
