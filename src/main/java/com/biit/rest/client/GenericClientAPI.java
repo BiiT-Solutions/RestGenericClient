@@ -6,13 +6,15 @@ import com.biit.rest.logger.RestClientLogger;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import javax.net.ssl.HttpsURLConnection;
+
 
 public abstract class GenericClientAPI {
+    public static final String DEFAULT_HEALTH_CHECK_PATH = "/health-check";
 
     private String baseUrl;
     private String path;
     private int portNumber;
-    public static final String DEFAULT_HEALTH_CHECK_PATH = "/health-check";
 
     public GenericClientAPI() {
         this.path = "";
@@ -26,8 +28,9 @@ public abstract class GenericClientAPI {
 
     public boolean healthCheck() {
         try {
-            Response result = RestGenericClient.get(isSSL(), getBaseUrlWithPort(), getPath() + getHealthCheckPath(), MediaType.MEDIA_TYPE_WILDCARD, false, null);
-            return result != null && result.getStatus() >= 200 && result.getStatus() < 300;
+            Response result = RestGenericClient.get(isSSL(), getBaseUrlWithPort(), getPath()
+                    + getHealthCheckPath(), MediaType.MEDIA_TYPE_WILDCARD, false, null);
+            return result != null && result.getStatus() >= HttpsURLConnection.HTTP_OK && result.getStatus() < HttpsURLConnection.HTTP_MULT_CHOICE;
         } catch (UnprocessableEntityException | EmptyResultException e) {
             RestClientLogger.errorMessage(this.getClass(), e);
             return false;

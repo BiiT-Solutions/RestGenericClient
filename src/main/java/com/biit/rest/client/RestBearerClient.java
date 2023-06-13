@@ -29,7 +29,12 @@ import static com.biit.rest.client.RestGenericClient.parseTarget;
 /**
  * Generic rest client using Jersey API that returns a string.
  */
-public class RestBearerClient {
+public final class RestBearerClient {
+    private static final int BUFFER_SIZE = 1024;
+
+    private RestBearerClient() {
+
+    }
 
     public static String post(String target, String path, String message, String requestType, String messageType, String encodedToken,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
@@ -77,8 +82,8 @@ public class RestBearerClient {
             throws UnprocessableEntityException, EmptyResultException {
 
         String response;
-        RestClientLogger.debug(RestBearerClient.class.getName(), "Calling rest service (get) '" + target +
-                (!target.endsWith("/") ? "/" : "") + path + "'.");
+        RestClientLogger.debug(RestBearerClient.class.getName(), "Calling rest service (get) '" + target
+                + (!target.endsWith("/") ? "/" : "") + path + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -157,7 +162,7 @@ public class RestBearerClient {
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int read;
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[BUFFER_SIZE];
 
         while ((read = inputStream.read(bytes)) != -1) {
             baos.write(bytes, 0, read);
