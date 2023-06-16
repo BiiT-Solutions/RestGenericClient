@@ -103,7 +103,7 @@ public final class RestGenericClient {
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
                     "Error calling rest service (post) '" + parseTarget(target) + parsePath(path)
-                            + "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -215,7 +215,7 @@ public final class RestGenericClient {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (get) '"
-                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "'.");
+                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -364,7 +364,7 @@ public final class RestGenericClient {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (delete) '"
-                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "'.");
+                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -447,7 +447,7 @@ public final class RestGenericClient {
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
                     "Error calling rest service (put) '" + parseTarget(target) + parsePath(path)
-                            + "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -565,7 +565,7 @@ public final class RestGenericClient {
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
                     "Error calling rest service (patch) '" + parseTarget(target) + parsePath(path)
-                            + "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);

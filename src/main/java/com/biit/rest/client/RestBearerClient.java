@@ -66,7 +66,7 @@ public final class RestBearerClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestBearerClient.class.getName(),
-                    "Error calling rest service (post) '" + parseTarget(target) + path + "' with message:\n '" + message + "'.");
+                    "Error calling rest service (post) '" + parseTarget(target) + path + "' with message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
