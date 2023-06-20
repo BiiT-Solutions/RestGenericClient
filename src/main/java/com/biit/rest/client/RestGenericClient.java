@@ -32,7 +32,13 @@ import java.util.Objects;
 /**
  * Generic rest client using Jersey API that returns a string.
  */
-public class RestGenericClient {
+public final class RestGenericClient {
+    private static final int BUFFER_SIZE = 1024;
+    private static final int UNPROCESSABLE_ENTITY_CODE = 422;
+
+    private RestGenericClient() {
+
+    }
 
     public static String parsePath(String path) {
         return path.startsWith("/") ? path.substring(1) : path;
@@ -57,8 +63,8 @@ public class RestGenericClient {
 
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (post) '" + parseTarget(target) + parsePath(path) +
-                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
+                "Calling rest service (post) '" + parseTarget(target) + parsePath(path)
+                        + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -96,8 +102,8 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (post) '" + parseTarget(target) + parsePath(path) +
-                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                    "Error calling rest service (post) '" + parseTarget(target) + parsePath(path)
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -120,13 +126,15 @@ public class RestGenericClient {
 
     @Deprecated
     public static Response post(boolean ssl, String target, String path, String message, String requestType, String messageType, boolean authentication,
-                                Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+                                Map<String, Object> parameters)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, requestType, message, authentication, parameters);
     }
 
 
     public static Response post(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                                Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+                                Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         if (authentication) {
             return post(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
@@ -146,12 +154,14 @@ public class RestGenericClient {
     }
 
 
-    public static Response post(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response post(String target, String path, String message, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, parameters, headers);
     }
 
-    public static Response post(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response post(String target, String path, String message, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return post(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, headers);
     }
@@ -164,8 +174,8 @@ public class RestGenericClient {
         }
 
         Response response;
-        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
-                (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
+        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target
+                + (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -205,7 +215,7 @@ public class RestGenericClient {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (get) '"
-                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "'.");
+                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -225,8 +235,8 @@ public class RestGenericClient {
                     throw nae;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target) + parsePath(path) +
-                    "' with parameters '" + parameters + "'!");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target)
+                    + parsePath(path) + "' with parameters '" + parameters + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
             throw e;
         }
@@ -313,8 +323,8 @@ public class RestGenericClient {
         }
 
         Response response;
-        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target +
-                (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
+        RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target
+                + (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -354,8 +364,7 @@ public class RestGenericClient {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Invalid request to '" + parseTarget(target) + parsePath(path) + "'.");
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(), "Error calling rest service (delete) '"
-                    + parseTarget(target) + parsePath(path) +
-                    "' with parameters '" + parameters + "'.");
+                    + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
@@ -375,8 +384,8 @@ public class RestGenericClient {
                     throw nae;
                 }
             }
-            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target) + parsePath(path) +
-                    "' with parameters '" + parameters + "'!");
+            RestClientLogger.severe(RestGenericClient.class.getName(), "Calling rest service '" + parseTarget(target)
+                    + parsePath(path) + "' with parameters '" + parameters + "'!");
             RestClientLogger.errorMessage(RestGenericClient.class.getName(), e);
             throw e;
         }
@@ -398,8 +407,8 @@ public class RestGenericClient {
 
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (put) '" + parseTarget(target) + parsePath(path) +
-                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
+                "Calling rest service (put) '" + parseTarget(target) + parsePath(path)
+                        + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -437,8 +446,8 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (put) '" + parseTarget(target) + parsePath(path) +
-                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                    "Error calling rest service (put) '" + parseTarget(target) + parsePath(path)
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -466,8 +475,9 @@ public class RestGenericClient {
     }
 
 
-    public static Response put(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                               Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response put(String target, String path, String message, String requestType, String messageType,
+                               boolean authentication, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         if (authentication) {
             return put(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
@@ -487,12 +497,14 @@ public class RestGenericClient {
     }
 
 
-    public static Response put(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response put(String target, String path, String message, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return put(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, parameters, headers);
     }
 
-    public static Response put(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response put(String target, String path, String message, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return put(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, headers);
     }
@@ -513,8 +525,8 @@ public class RestGenericClient {
 
         Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
-                "Calling rest service (patch) '" + parseTarget(target) + parsePath(path) +
-                        "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
+                "Calling rest service (patch) '" + parseTarget(target) + parsePath(path)
+                        + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
         try {
             ClientBuilder builder = ClientBuilder.newBuilder();
 
@@ -552,8 +564,8 @@ public class RestGenericClient {
             return response;
         } catch (Exception e) {
             RestClientLogger.severe(RestGenericClient.class.getName(),
-                    "Error calling rest service (patch) '" + parseTarget(target) + parsePath(path) +
-                            "' with parameters '" + parameters + "' and message:\n '" + message + "'.");
+                    "Error calling rest service (patch) '" + parseTarget(target) + parsePath(path)
+                            + "' with parameters '" + parameters + "' and message:\n '" + message + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
                     throw new UnprocessableEntityException(e.getMessage(), e);
@@ -582,7 +594,8 @@ public class RestGenericClient {
 
 
     public static Response patch(String target, String path, String message, String requestType, String messageType, boolean authentication,
-                                 Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+                                 Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         if (authentication) {
             return patch(target, path, message, requestType, messageType, LiferayConfigurationReader.getInstance().getUser(),
                     LiferayConfigurationReader.getInstance().getPassword(), parameters, headers);
@@ -602,12 +615,14 @@ public class RestGenericClient {
     }
 
 
-    public static Response patch(String target, String path, String message, Map<String, Object> parameters, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response patch(String target, String path, String message, Map<String, Object> parameters, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return patch(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, parameters, headers);
     }
 
-    public static Response patch(String target, String path, String message, List<Header> headers) throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+    public static Response patch(String target, String path, String message, List<Header> headers)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return patch(target, path, message, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON,
                 false, null, headers);
     }
@@ -648,7 +663,7 @@ public class RestGenericClient {
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read;
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[BUFFER_SIZE];
 
         while ((read = inputStream.read(bytes)) != -1) {
             byteArrayOutputStream.write(bytes, 0, read);
@@ -660,13 +675,13 @@ public class RestGenericClient {
         if (response == null) {
             return;
         }
-        if (Objects.equals(response.getStatus(), 422)) {
+        if (Objects.equals(response.getStatus(), UNPROCESSABLE_ENTITY_CODE)) {
             throw new UnprocessableEntityException("Returned Status is 422.");
-        } else if (Objects.equals(response.getStatus(), 406)) {
+        } else if (Objects.equals(response.getStatus(), Response.Status.NOT_ACCEPTABLE.getStatusCode())) {
             throw new EmptyResultException("Returned Status is 406.");
-        } else if (Objects.equals(response.getStatus(), 404)) {
+        } else if (Objects.equals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode())) {
             throw new NotFoundException("Returned Status is 404.");
-        } else if (Objects.equals(response.getStatus(), 401)) {
+        } else if (Objects.equals(response.getStatus(), Response.Status.UNAUTHORIZED.getStatusCode())) {
             throw new NotAuthorizedException("Returned Status is 401.");
         }
     }
