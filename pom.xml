@@ -68,8 +68,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<source>${java.jdk.version}</source>
-					<target>${java.jdk.version}</target>
+					<source>${java-old.version}</source>
+					<target>${java-old.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
