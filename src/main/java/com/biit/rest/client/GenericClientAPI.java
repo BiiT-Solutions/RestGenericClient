@@ -28,7 +28,7 @@ public abstract class GenericClientAPI {
 
     public boolean healthCheck() {
         try {
-            Response result = RestGenericClient.get(isSSL(), getBaseUrlWithPort(), getPath()
+            final Response result = RestGenericClient.get(isSSL(), getBaseUrlWithPort(), getPath()
                     + getHealthCheckPath(), MediaType.MEDIA_TYPE_WILDCARD, false, null);
             return result != null && result.getStatus() >= HttpsURLConnection.HTTP_OK && result.getStatus() < HttpsURLConnection.HTTP_MULT_CHOICE;
         } catch (UnprocessableEntityException | EmptyResultException e) {

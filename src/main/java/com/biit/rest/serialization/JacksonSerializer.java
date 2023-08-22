@@ -18,8 +18,8 @@ public final class JacksonSerializer {
     }
 
     public static ObjectMapper generateCustomSerializer(Map<Class<?>, JsonSerializer> customSerializers) {
-        ObjectMapper customObjectMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
+        final ObjectMapper customObjectMapper = new ObjectMapper();
+        final SimpleModule module = new SimpleModule();
         customSerializers.forEach(module::addSerializer);
         customObjectMapper.registerModule(module);
         return customObjectMapper;

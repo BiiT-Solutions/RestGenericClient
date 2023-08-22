@@ -22,6 +22,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.net.ssl.SSLContext;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -48,6 +49,20 @@ public final class RestGenericClient {
         return target + (!target.endsWith("/") ? "/" : "");
     }
 
+    public static String getContextPath(String path) {
+        if (path == null || path.isBlank()) {
+            return "";
+        }
+        if (path.startsWith(File.pathSeparator)) {
+            path = path.substring(1);
+        }
+        final int pathSeparator = path.indexOf(File.pathSeparator);
+        if (pathSeparator > 0) {
+            return path.substring(0, pathSeparator);
+        }
+        return path;
+    }
+
     public static Response post(String target, String path, String message, String requestType, String messageType,
                                 String username, String password, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
@@ -61,7 +76,7 @@ public final class RestGenericClient {
             throw new NotFoundException("No target defined!");
         }
 
-        Response response;
+        final Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
                 "Calling rest service (post) '" + parseTarget(target) + parsePath(path)
                         + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
@@ -70,7 +85,7 @@ public final class RestGenericClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -110,11 +125,11 @@ public final class RestGenericClient {
                 } else if (e.getMessage().contains("HTTP 406")) {
                     throw new EmptyResultException(e.getMessage(), e);
                 } else if (e.getMessage().contains("HTTP 404")) {
-                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    final NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 401")) {
-                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    final NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
                     nae.setStackTrace(e.getStackTrace());
                     throw nae;
                 }
@@ -173,7 +188,7 @@ public final class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
-        Response response;
+        final Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target
                 + (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
@@ -181,7 +196,7 @@ public final class RestGenericClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -218,19 +233,19 @@ public final class RestGenericClient {
                     + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
-                    UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
+                    final UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 406")) {
-                    EmptyResultException uee = new EmptyResultException(e.getMessage());
+                    final EmptyResultException uee = new EmptyResultException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 404")) {
-                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    final NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 401")) {
-                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    final NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
                     nae.setStackTrace(e.getStackTrace());
                     throw nae;
                 }
@@ -322,7 +337,7 @@ public final class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
-        Response response;
+        final Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(), "Calling rest service (get) '" + target
                 + (!target.endsWith("/") ? "/" : "") + parsePath(path) + "'.");
         try {
@@ -330,7 +345,7 @@ public final class RestGenericClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -367,19 +382,19 @@ public final class RestGenericClient {
                     + parseTarget(target) + parsePath(path) + "' with parameters '" + parameters + "': " + e.getMessage());
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
-                    UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
+                    final UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 406")) {
-                    EmptyResultException uee = new EmptyResultException(e.getMessage());
+                    final EmptyResultException uee = new EmptyResultException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 404")) {
-                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    final NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 401")) {
-                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    final NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
                     nae.setStackTrace(e.getStackTrace());
                     throw nae;
                 }
@@ -405,7 +420,7 @@ public final class RestGenericClient {
             throw new NotFoundException("No target defined!");
         }
 
-        Response response;
+        final Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
                 "Calling rest service (put) '" + parseTarget(target) + parsePath(path)
                         + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
@@ -414,7 +429,7 @@ public final class RestGenericClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -454,11 +469,11 @@ public final class RestGenericClient {
                 } else if (e.getMessage().contains("HTTP 406")) {
                     throw new EmptyResultException(e.getMessage(), e);
                 } else if (e.getMessage().contains("HTTP 404")) {
-                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    final NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 401")) {
-                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    final NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
                     nae.setStackTrace(e.getStackTrace());
                     throw nae;
                 }
@@ -523,7 +538,7 @@ public final class RestGenericClient {
             throw new NotFoundException("No target defined!");
         }
 
-        Response response;
+        final Response response;
         RestClientLogger.debug(RestGenericClient.class.getName(),
                 "Calling rest service (patch) '" + parseTarget(target) + parsePath(path)
                         + "' with parameters '" + parameters + "' and with message:\n '" + message + "'.");
@@ -532,7 +547,7 @@ public final class RestGenericClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -572,11 +587,11 @@ public final class RestGenericClient {
                 } else if (e.getMessage().contains("HTTP 406")) {
                     throw new EmptyResultException(e.getMessage(), e);
                 } else if (e.getMessage().contains("HTTP 404")) {
-                    NotFoundException uee = new NotFoundException(e.getMessage());
+                    final NotFoundException uee = new NotFoundException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 401")) {
-                    NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
+                    final NotAuthorizedException nae = new NotAuthorizedException(e.getMessage());
                     nae.setStackTrace(e.getStackTrace());
                     throw nae;
                 }
@@ -636,13 +651,13 @@ public final class RestGenericClient {
     }
 
     private static byte[] postForImage(String target, String path, String requestType, String json) {
-        boolean ssl = target.startsWith("https");
+        final boolean ssl = target.startsWith("https");
 
-        HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(LiferayConfigurationReader.getInstance().getUser(),
+        final HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(LiferayConfigurationReader.getInstance().getUser(),
                 LiferayConfigurationReader.getInstance().getPassword());
-        Response response;
+        final Response response;
         if (ssl) {
-            SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+            final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
             response = ClientBuilder.newBuilder().sslContext(sslContext).build().target(UriBuilder.fromUri(target).build()).path(path)
                     .register(authenticationFeature).request(requestType).post(Entity.entity(json, MediaType.APPLICATION_JSON));
         } else {
@@ -650,7 +665,7 @@ public final class RestGenericClient {
                     .request(requestType).post(Entity.entity(json, MediaType.APPLICATION_JSON));
         }
         if (response.getStatusInfo().toString().equals(Response.Status.OK.toString())) {
-            InputStream result = response.readEntity(InputStream.class);
+            final InputStream result = response.readEntity(InputStream.class);
             try {
                 return toByteArray(result);
             } catch (IOException e) {
@@ -661,9 +676,9 @@ public final class RestGenericClient {
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read;
-        byte[] bytes = new byte[BUFFER_SIZE];
+        final byte[] bytes = new byte[BUFFER_SIZE];
 
         while ((read = inputStream.read(bytes)) != -1) {
             byteArrayOutputStream.write(bytes, 0, read);

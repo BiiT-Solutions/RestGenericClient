@@ -38,7 +38,7 @@ public final class RestBearerClient {
 
     public static String post(String target, String path, String message, String requestType, String messageType, String encodedToken,
                               Map<String, Object> parameters) throws UnprocessableEntityException, EmptyResultException {
-        String response;
+        final String response;
         RestClientLogger.debug(RestBearerClient.class.getName(),
                 "Calling rest service (post) '" + parseTarget(target) + path + "' with message:\n '" + message + "'.");
         try {
@@ -46,7 +46,7 @@ public final class RestBearerClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
 
@@ -81,7 +81,7 @@ public final class RestBearerClient {
     public static String get(String target, String path, String messageType, String encodedToken, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException {
 
-        String response;
+        final String response;
         RestClientLogger.debug(RestBearerClient.class.getName(), "Calling rest service (get) '" + target
                 + (!target.endsWith("/") ? "/" : "") + path + "'.");
         try {
@@ -89,7 +89,7 @@ public final class RestBearerClient {
 
             // Https
             if (target.startsWith("https")) {
-                SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+                final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
                 builder = builder.sslContext(sslContext);
             }
             // Add Parameters
@@ -111,11 +111,11 @@ public final class RestBearerClient {
             RestClientLogger.severe(RestBearerClient.class.getName(), "Error calling rest rest service (get) '" + parseTarget(target) + path + "'.");
             if (e instanceof ClientErrorException) {
                 if (e.getMessage().contains("HTTP 422")) {
-                    UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
+                    final UnprocessableEntityException uee = new UnprocessableEntityException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 } else if (e.getMessage().contains("HTTP 406")) {
-                    EmptyResultException uee = new EmptyResultException(e.getMessage());
+                    final EmptyResultException uee = new EmptyResultException(e.getMessage());
                     uee.setStackTrace(e.getStackTrace());
                     throw uee;
                 }
@@ -135,13 +135,13 @@ public final class RestBearerClient {
     }
 
     private static byte[] postForImage(String target, String path, String requestType, String json) {
-        boolean ssl = target.startsWith("https");
+        final boolean ssl = target.startsWith("https");
 
-        HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(LiferayConfigurationReader.getInstance().getUser(),
+        final HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(LiferayConfigurationReader.getInstance().getUser(),
                 LiferayConfigurationReader.getInstance().getPassword());
-        Response response;
+        final Response response;
         if (ssl) {
-            SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+            final SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
             response = ClientBuilder.newBuilder().sslContext(sslContext).build().target(UriBuilder.fromUri(target).build()).path(path)
                     .register(authenticationFeature).request(requestType).post(Entity.entity(json, MediaType.APPLICATION_JSON));
         } else {
@@ -149,7 +149,7 @@ public final class RestBearerClient {
                     .request(requestType).post(Entity.entity(json, MediaType.APPLICATION_JSON));
         }
         if (response.getStatusInfo().toString().equals(Response.Status.OK.toString())) {
-            InputStream result = response.readEntity(InputStream.class);
+            final InputStream result = response.readEntity(InputStream.class);
             try {
                 return toByteArray(result);
             } catch (IOException e) {
@@ -160,9 +160,9 @@ public final class RestBearerClient {
     }
 
     private static byte[] toByteArray(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int read;
-        byte[] bytes = new byte[BUFFER_SIZE];
+        final byte[] bytes = new byte[BUFFER_SIZE];
 
         while ((read = inputStream.read(bytes)) != -1) {
             baos.write(bytes, 0, read);
