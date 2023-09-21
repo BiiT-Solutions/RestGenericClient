@@ -28,8 +28,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
+		<connection>scm:git:git.biit-solutions.com:Java/RestGenericClient.git</connection>
+		<developerConnection>scm:git:git.biit-solutions.com:Java/RestGenericClient.git</developerConnection>
 		<tag>rest-generic-client-1.0.17</tag>
 	</scm>
 
