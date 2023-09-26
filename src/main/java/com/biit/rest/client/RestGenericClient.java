@@ -146,6 +146,11 @@ public final class RestGenericClient {
         return post(target, path, message, requestType, message, authentication, parameters);
     }
 
+    public static Response get(String target, String path, String message, String requestType, String messageType)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return post(target, path, message, requestType, messageType, false, null, null);
+    }
+
 
     public static Response post(String target, String path, String message, String requestType, String messageType, boolean authentication,
                                 Map<String, Object> parameters, List<Header> headers)
@@ -262,6 +267,11 @@ public final class RestGenericClient {
     public static Response get(boolean ssl, String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
         return get(target, path, messageType, authentication, parameters, null);
+    }
+
+    public static Response get(String target, String path, String messageType)
+            throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+        return get(target, path, messageType, false, null, null);
     }
 
     public static Response get(String target, String path, String messageType, boolean authentication, Map<String, Object> parameters)
