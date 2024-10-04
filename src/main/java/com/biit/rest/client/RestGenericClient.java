@@ -1,7 +1,6 @@
 package com.biit.rest.client;
 
 import com.biit.liferay.configuration.LiferayConfigurationReader;
-import com.biit.logger.BiitCommonLogger;
 import com.biit.rest.exceptions.EmptyResultException;
 import com.biit.rest.exceptions.NotAuthorizedException;
 import com.biit.rest.exceptions.NotFoundException;
@@ -66,6 +65,11 @@ public final class RestGenericClient {
     public static Response post(String target, String path, String message, String requestType, String messageType,
                                 String username, String password, Map<String, Object> parameters, List<Header> headers)
             throws UnprocessableEntityException, EmptyResultException, NotAuthorizedException {
+
+        //Null messages not allowed.
+        if (message == null) {
+            message = "";
+        }
 
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null && password != null) {
@@ -426,6 +430,11 @@ public final class RestGenericClient {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
         }
 
+        //Null messages not allowed.
+        if (message == null) {
+            message = "";
+        }
+
         if (target == null) {
             throw new NotFoundException("No target defined!");
         }
@@ -542,6 +551,11 @@ public final class RestGenericClient {
         HttpAuthenticationFeature authenticationFeature = null;
         if (username != null && password != null) {
             authenticationFeature = HttpAuthenticationFeature.basic(username, password);
+        }
+
+        //Null messages not allowed.
+        if (message == null) {
+            message = "";
         }
 
         if (target == null) {
@@ -679,7 +693,7 @@ public final class RestGenericClient {
             try {
                 return toByteArray(result);
             } catch (IOException e) {
-                BiitCommonLogger.errorMessageNotification(RestGenericClient.class, e);
+                RestClientLogger.errorMessage(RestGenericClient.class, e);
             }
         }
         return null;
