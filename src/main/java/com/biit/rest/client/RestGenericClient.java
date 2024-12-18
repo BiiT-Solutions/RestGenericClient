@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -102,7 +103,11 @@ public final class RestGenericClient {
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
-                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    if (record.getValue() instanceof Collection) {
+                        webTarget = webTarget.queryParam(record.getKey(), ((Collection<?>) record.getValue()).toArray());
+                    } else {
+                        webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    }
                 }
             }
 
@@ -218,7 +223,11 @@ public final class RestGenericClient {
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
-                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    if (record.getValue() instanceof Collection) {
+                        webTarget = webTarget.queryParam(record.getKey(), ((Collection<?>) record.getValue()).toArray());
+                    } else {
+                        webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    }
                 }
             }
 
@@ -372,7 +381,11 @@ public final class RestGenericClient {
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
-                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    if (record.getValue() instanceof Collection) {
+                        webTarget = webTarget.queryParam(record.getKey(), ((Collection<?>) record.getValue()).toArray());
+                    } else {
+                        webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    }
                 }
             }
 
@@ -461,7 +474,11 @@ public final class RestGenericClient {
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
-                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    if (record.getValue() instanceof Collection) {
+                        webTarget = webTarget.queryParam(record.getKey(), ((Collection<?>) record.getValue()).toArray());
+                    } else {
+                        webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    }
                 }
             }
 
@@ -584,7 +601,11 @@ public final class RestGenericClient {
             WebTarget webTarget = builder.build().target(UriBuilder.fromUri(target).build()).path(parsePath(path));
             if (parameters != null && !parameters.isEmpty()) {
                 for (Entry<String, Object> record : parameters.entrySet()) {
-                    webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    if (record.getValue() instanceof Collection) {
+                        webTarget = webTarget.queryParam(record.getKey(), ((Collection<?>) record.getValue()).toArray());
+                    } else {
+                        webTarget = webTarget.queryParam(record.getKey(), record.getValue());
+                    }
                 }
             }
 
