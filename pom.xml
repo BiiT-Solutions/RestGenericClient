@@ -64,26 +64,31 @@
         <dependency>
             <groupId>com.biit-solutions.liferay</groupId>
             <artifactId>liferay-configuration-reader</artifactId>
+            <version>${liferay-configuration-reader.version}</version>
         </dependency>
         <!-- File access and logger -->
         <dependency>
             <groupId>com.biit-solutions</groupId>
             <artifactId>common-utils</artifactId>
+            <version>${biit-common-utils.version}</version>
         </dependency>
         <!-- Testing -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <version>${org.testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
         </dependency>
         <!-- Jersey Client, Jersey Container, Jersey + Spring -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
+            <version>${jersey-client.version}</version>
         </dependency>
     </dependencies>
 
