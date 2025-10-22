@@ -40,7 +40,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=biit-solutions
-            "-Dsonar.projectName=BiiT Common Utils"
+            "-Dsonar.projectName=Rest Generic Client"
             -Dsonar.projectKey=BiiT-Solutions_RestGenericClient
             -Dsonar.java.binaries=.
             -Dsonar.verbose=true

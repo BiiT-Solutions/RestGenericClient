@@ -1,157 +1,171 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.biit-solutions</groupId>
-	<artifactId>rest-generic-client</artifactId>
-	<packaging>jar</packaging>
-	<version>1.2.77-SNAPSHOT</version>
-	<name>Rest Generic Client</name>
-	<description>Basic Rest structure</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.biit-solutions</groupId>
+    <artifactId>rest-generic-client</artifactId>
+    <packaging>jar</packaging>
+    <version>1.2.77-SNAPSHOT</version>
+    <name>Rest Generic Client</name>
+    <description>Basic Rest structure</description>
+    <url>https://github.com/BiiT-Solutions</url>
 
-	<parent>
-		<groupId>com.biit-solutions</groupId>
-		<artifactId>versions</artifactId>
-		<version>[1.0,1.1)</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>com.biit-solutions</groupId>
+        <artifactId>versions</artifactId>
+        <version>[1.0,1.1)</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<organization>
-		<name>BiiT Sourcing Solutions S.L.</name>
-		<url>https://www.biit-solutions.com/</url>
-	</organization>
+    <organization>
+        <name>BiiT Sourcing Solutions S.L.</name>
+        <url>https://www.biit-solutions.com/</url>
+    </organization>
 
-	<licenses>
-		<license>
-			<name>GNU AGPL v3</name>
-			<url>https://www.gnu.org/licenses/agpl-3.0.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>GNU AGPL v3</name>
+            <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<distributionManagement>
-		<repository>
-			<id>central</id>
-			<name>Maven Central</name>
-			<url>https://repo.maven.apache.org/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>github</id>
-			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/BiiT-Solutions/RestGenericClient</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <developers>
+        <developer>
+            <id>jhortelano</id>
+            <name>Jorge Hortelano</name>
+            <email>jhortelano@biit-solutions.com</email>
+            <roles>
+                <role>Project-Administrator</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
-	<scm>
-		<connection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</developerConnection>
-		<url>https://github.com/BiiT-Solutions/RestGenericClient.git</url>
-		<tag>rest-generic-client-1.0.17</tag>
-	</scm>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/BiiT-Solutions/RestGenericClient</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.biit-solutions.liferay</groupId>
-			<artifactId>liferay-configuration-reader</artifactId>
-		</dependency>
-		<!-- File access and logger -->
-		<dependency>
-			<groupId>com.biit-solutions</groupId>
-			<artifactId>common-utils</artifactId>
-		</dependency>
-		<!-- Testing -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<!-- Jersey Client, Jersey Container, Jersey + Spring -->
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-		</dependency>
-	</dependencies>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</developerConnection>
+        <url>https://github.com/BiiT-Solutions/RestGenericClient.git</url>
+        <tag>rest-generic-client-1.0.17</tag>
+    </scm>
 
-	<build>
-		<finalName>rest-generic-client</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java-latest.jdk.version}</source>
-					<target>${java-latest.jdk.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire.version}</version>
-				<configuration>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
-					<suiteXmlFiles>
-						<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-					</suiteXmlFiles>
-					<useSystemClassLoader>false</useSystemClassLoader>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>${maven-resources-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven-release-plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.scm</groupId>
-						<artifactId>maven-scm-provider-gitexe</artifactId>
-						<version>${maven-scm-provider-gitexe.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<checkModificationExcludes>
-						<checkModificationExclude>pom.xml</checkModificationExclude>
-					</checkModificationExcludes>
-					<!-- This action is used by release:perform -->
-					<!-- During release:perform, enable the "release" profile -->
-					<releaseProfiles>release</releaseProfiles>
-					<!-- This goal is used by release:perform -->
-					<goals>deploy</goals>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>${license-maven-plugin.version}</version>
-				<configuration>
-					<organizationName>BiiT Sourcing Solutions S.L.</organizationName>
-					<inceptionYear>2022</inceptionYear>
-					<licenseName>agpl_v3</licenseName>
-					<excludes>
-						<exclude>**/*.properties</exclude>
-						<exclude>**/*.xml</exclude>
-						<exclude>**/*.json</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-						</goals>
-						<phase>package</phase>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <dependencies>
+        <dependency>
+            <groupId>com.biit-solutions.liferay</groupId>
+            <artifactId>liferay-configuration-reader</artifactId>
+        </dependency>
+        <!-- File access and logger -->
+        <dependency>
+            <groupId>com.biit-solutions</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!-- Jersey Client, Jersey Container, Jersey + Spring -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>rest-generic-client</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java-latest.jdk.version}</source>
+                    <target>${java-latest.jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <useFile>false</useFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>${maven-scm-provider-gitexe.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <checkModificationExcludes>
+                        <checkModificationExclude>pom.xml</checkModificationExclude>
+                    </checkModificationExcludes>
+                    <!-- This action is used by release:perform -->
+                    <!-- During release:perform, enable the "release" profile -->
+                    <releaseProfiles>release</releaseProfiles>
+                    <!-- This goal is used by release:perform -->
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <configuration>
+                    <organizationName>BiiT Sourcing Solutions S.L.</organizationName>
+                    <inceptionYear>2022</inceptionYear>
+                    <licenseName>agpl_v3</licenseName>
+                    <excludes>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.json</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
 
