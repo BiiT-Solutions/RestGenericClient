@@ -3,7 +3,7 @@
 	<groupId>com.biit-solutions</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.23</version>
+	<version>1.1.24-SNAPSHOT</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
 	<url>https://github.com/BiiT-Solutions</url>
@@ -57,7 +57,7 @@
         <connection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</developerConnection>
         <url>https://github.com/BiiT-Solutions/RestGenericClient.git</url>
-        <tag>rest-generic-client-1.1.23</tag>
+        <tag>rest-generic-client-1.0.17</tag>
     </scm>
 
 	<dependencies>
