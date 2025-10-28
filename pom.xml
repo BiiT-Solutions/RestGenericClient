@@ -1,11 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.biit</groupId>
+	<groupId>com.biit-solutions</groupId>
 	<artifactId>rest-generic-client</artifactId>
 	<packaging>jar</packaging>
 	<version>1.1.23-SNAPSHOT</version>
 	<name>Rest Generic Client</name>
 	<description>Basic Rest structure</description>
+	<url>https://github.com/BiiT-Solutions</url>
 
 	<parent>
 		<groupId>com.biit</groupId>
@@ -14,39 +15,68 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<distributionManagement>
-		<repository>
-			<id>central</id>
-			<name>libs-releases</name>
-			<url>https://artifactory.biit-solutions.com/artifactory/libs-release</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>https://artifactory.biit-solutions.com/artifactory/libs-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <organization>
+        <name>BiiT Sourcing Solutions S.L.</name>
+        <url>https://www.biit-solutions.com/</url>
+    </organization>
 
-	<scm>
-		<connection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:BiiT/RestGenericClient.git</developerConnection>
-		<tag>rest-generic-client-1.0.17</tag>
-	</scm>
+    <licenses>
+        <license>
+            <name>GNU AGPL v3</name>
+            <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>jhortelano</id>
+            <name>Jorge Hortelano</name>
+            <email>jhortelano@biit-solutions.com</email>
+            <roles>
+                <role>Project-Administrator</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/BiiT-Solutions/RestGenericClient</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/RestGenericClient.git</developerConnection>
+        <url>https://github.com/BiiT-Solutions/RestGenericClient.git</url>
+        <tag>rest-generic-client-1.0.17</tag>
+    </scm>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.biit.liferay</groupId>
+			<groupId>com.biit-solutions.liferay</groupId>
 			<artifactId>liferay-configuration-reader</artifactId>
+			<version>${liferay-configuration-reader.version}</version>
 		</dependency>
 		<!-- File access and logger -->
 		<dependency>
-			<groupId>com.biit</groupId>
+			<groupId>com.biit-solutions</groupId>
 			<artifactId>common-utils</artifactId>
+			<version>${biit-common-utils.version}</version>
 		</dependency>
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
+			<version>${org.testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -111,6 +141,30 @@
 					<!-- This goal is used by release:perform -->
 					<goals>deploy</goals>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.7.0</version>
+				<configuration>
+					<organizationName>BiiT Sourcing Solutions S.L.</organizationName>
+					<inceptionYear>2022</inceptionYear>
+					<licenseName>agpl_v3</licenseName>
+					<excludes>
+						<exclude>**/*.properties</exclude>
+						<exclude>**/*.xml</exclude>
+						<exclude>**/*.json</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
